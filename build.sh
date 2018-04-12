@@ -18,14 +18,14 @@ if ! which docker > /dev/null 2>&1; then
   install_docker
 fi
 
-# Remove any previously build images
+# Remove any previously built images
 if ! require_vars DOCKER_IMAGE; then
   echo "Set required variables"
   exit 1
 fi
-if docker images -a | awk '{print $1}' | grep $DOCKER_IMAGE > /dev/null 2>&1; then
+if sudo docker images -a | awk '{print $1}' | grep $DOCKER_IMAGE > /dev/null 2>&1; then
   for image_id in `docker images -a | grep ^${DOCKER_IMAGE} | awk '{print $3}'`; do 
-    docker rmi $image_id
+    sudo docker rmi $image_id
   done
 fi
 
