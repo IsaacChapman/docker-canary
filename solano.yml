@@ -1,0 +1,6 @@
+# Required environment variables:
+#   DOCKER_IMAGE
+#   DOCKER_USERNAME
+#   DOCKER_PASSWORD
+
+script: ./build.sh
