@@ -46,7 +46,7 @@ fi
 
 if [ -f $ARTIFACT_DIR/previous_sessions.html.txt ]; then
   echo '<div id="prev_sess_info">' >> web/index.html
-  echo '<div id="prev_sess_info_header">Previous Sessions:</div>' >> web/index.html
+  echo '<div id="prev_sess_info_header">Session History:</div>' >> web/index.html
   while IFS='' read -r line || [[ -n "$line" ]]; do
     echo "${line}<br />" >> web/index.html
   done < $ARTIFACT_DIR/previous_sessions.html.txt 
