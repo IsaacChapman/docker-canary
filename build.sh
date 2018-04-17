@@ -15,7 +15,7 @@ source functions.sh
 if require_vars TDDIUM TDDIUM_SESSION_ID; then
   export ARTIFACT_DIR=${HOME}/results/${TDDIUM_SESSION_ID}/session
 else
-  export ARTIFACT_DIR=`mktemp -d -t canary-artifacts`
+  export ARTIFACT_DIR=`mktemp -d -t canary-artifacts.XXXXXXX`
 fi
 mkdir -p $ARTIFACT_DIR
 TIMESTAMP=`date +%s` # Use a consistent value of time 
