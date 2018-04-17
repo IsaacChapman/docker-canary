@@ -22,16 +22,17 @@ cat > web/index.html <<EOF
     #canary {display: block; width:100%;}
     #text_div {position: absolute; right: 20px; top: 20px;}
     #text_div div {color: #FFFFFF; font-weight: bold; font-size: x-large;}
+    #text_div a {color: #FFFFFF;}
   </style>
 </head>
 <body>
 <img id="canary" title="canary" src="https://s3.amazonaws.com/isaacchapman/nature-branch-bird-wildlife-beak-yellow-700939-pxhere.com.jpg" />
 <div id="text_div">
-  <div id="year_div">${YEAR}</div>
-  <div id="month_div">${MONTH}</div>
-  <div id="day_div">${DAY}</div>
-  <div id="time_div">${TIME}</div>
-  <div id="seconds_div">${SECONDS}</div>
+  <div id="year_div">Year: ${YEAR}</div>
+  <div id="month_div">Month: ${MONTH}</div>
+  <div id="day_div">Day: ${DAY}</div>
+  <div id="time_div">Time: ${TIME}</div>
+  <div id="seconds_div">Timestamp: ${SECONDS}</div>
   <div id="divider" />
 EOF
 
@@ -45,6 +46,7 @@ fi
 
 if [ -f $ARTIFACT_DIR/previous_sessions.html.txt ]; then
   echo '<div id="prev_sess_info">' >> web/index.html
+  echo '<div id="prev_sess_info_header">Previous Sessions:</div>' >> web/index.html
   while IFS='' read -r line || [[ -n "$line" ]]; do
     echo "${line}<br />" >> web/index.html
   done < $ARTIFACT_DIR/previous_sessions.html.txt 
