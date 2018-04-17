@@ -31,13 +31,10 @@ if ! require_vars SOLANO_API_KEY; then
   echo "ERROR: \$SOLANO_API_KEY needs to be set" | tee -a $ARTIFACT_DIR/errors.txt
 elif ! fetch_current_session_info; then
   echo "ERROR: Could not fetch current session information" | tee -a $ARTIFACT_DIR/errors.txt
-else
-  BUILD_INFO_HTML="Repo: ${REPO_NAME} (${REPO_ID})<br />Branch: ${BRANCH_NAME} (${BRANCH_ID})"
 fi
 
 # Only searxh for previous results if we could lookup current session info above
 if [ ! -z "$BUILD_INFO_HTML" ]; then
-if [[ "$EXIT_CODE" == "0" ]]; then
   if ! fetch_previous_sessions_info; then
     echo "ERROR: Could not fetch previous session information" | tee -a $ARTIFACT_DIR/errors.txt
   fi
