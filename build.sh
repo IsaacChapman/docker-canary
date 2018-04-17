@@ -13,9 +13,9 @@ source functions.sh
 ### PREP
 
 if require_vars TDDIUM TDDIUM_SESSION_ID; then
-  ARTIFACT_DIR=${HOME}/results/${TDDIUM_SESSION_ID}/session
+  export ARTIFACT_DIR=${HOME}/results/${TDDIUM_SESSION_ID}/session
 else
-  ARTIFACT_DIR=`mktemp -d -t canary-artifacts`
+  export ARTIFACT_DIR=`mktemp -d -t canary-artifacts`
 fi
 mkdir -p $ARTIFACT_DIR
 TIMESTAMP=`date +%s` # Use a consistent value of time 
@@ -27,6 +27,7 @@ fi
 
 # Determine $REPO_ID, $REPO_NAME, $BRANCH_ID, and $BRANCH_NAME for current session using API
 # http://solano-api-docs.nfshost.com/
+rm -f ${ARTIFACT_DIR}/repo_info.html.txt
 if ! require_vars SOLANO_API_KEY; then
   echo "ERROR: \$SOLANO_API_KEY needs to be set" | tee -a $ARTIFACT_DIR/errors.txt
 elif ! fetch_current_session_info; then
@@ -34,7 +35,8 @@ elif ! fetch_current_session_info; then
 fi
 
 # Only searxh for previous results if we could lookup current session info above
-if [ ! -z "$BUILD_INFO_HTML" ]; then
+if [ -f ${ARTIFACT_DIR}/repo_info.html.txt ]; then
+  rm -f ${ARTIFACT_DIR}/previous_sessions.html.txt
   if ! fetch_previous_sessions_info; then
     echo "ERROR: Could not fetch previous session information" | tee -a $ARTIFACT_DIR/errors.txt
   fi
