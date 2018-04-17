@@ -2,5 +2,6 @@
 #   DOCKER_IMAGE
 #   DOCKER_USERNAME
 #   DOCKER_PASSWORD
+#   SOLANO_API_KEY
 
 script: ./build.sh

@@ -16,7 +16,7 @@ cat > web/index.html <<EOF
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Canary</title>
+  <title>Status Canary</title>
   <style>
     body {background-color: 000000; margin: 0px;}
     #canary {display: block; width:100%;}
@@ -25,13 +25,15 @@ cat > web/index.html <<EOF
   </style>
 </head>
 <body>
-<img id="canary" title="canary" src="nature-branch-bird-wildlife-beak-yellow-700939-pxhere.com.jpg" />
+<img id="canary" title="canary" src="https://s3.amazonaws.com/isaacchapman/nature-branch-bird-wildlife-beak-yellow-700939-pxhere.com.jpg" />
 <div id="text_div">
   <div id="year_div">${YEAR}</div>
   <div id="month_div">${MONTH}</div>
   <div id="day_div">${DAY}</div>
   <div id="time_div">${TIME}</div>
   <div id="seconds_div">${SECONDS}</div>
+  <div id="divider" />
+  <div id="extra_html">${EXTRA_HTML}</div>
 </div>
 </body>
 </html>
