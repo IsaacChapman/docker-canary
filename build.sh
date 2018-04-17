@@ -18,7 +18,7 @@ else
   ARTIFACT_DIR=`mktemp -d -t canary-artifacts`
 fi
 mkdir -p $ARTIFACT_DIR
-EXTRA_HTML=""
+export EXTRA_HTML=""
 EXIT_CODE=0
 TIMESTAMP=`date +%s` # Use a consistent value of time 
 
@@ -38,7 +38,7 @@ elif ! fetch_current_session_info; then
   unset ERROR_HTML
 else
   EXTRA_HTML="Repo: ${REPO_NAME} (${REPO_ID})"
-  EXTRA_HTML="${EXTRA_HTML}<br />Branch: ${BRANCH_NAME} (${$BRANCH_ID})"
+  EXTRA_HTML="${EXTRA_HTML}<br />Branch: ${BRANCH_NAME} (${BRANCH_ID})"
 fi
 
 # Only searxh for previous results if we could lookup current session info above
