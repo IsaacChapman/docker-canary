@@ -33,8 +33,35 @@ cat > web/index.html <<EOF
   <div id="time_div">${TIME}</div>
   <div id="seconds_div">${SECONDS}</div>
   <div id="divider" />
+EOF
+
+if [ -f $ARTIFACT_DIR/repo_info.html.txt ]; then
+  echo '<div id="repo_info">' >> web/index.html
+  while IFS='' read -r line || [[ -n "$line" ]]; do
+    echo "${line}<br />" >> web/index.html
+  done < $ARTIFACT_DIR/repo_info.html.txt
+  echo '</div>' >> web/index.html
+fi
+
+if [ -f $ARTIFACT_DIR/previous_sessions.html.txt ]; then
+  echo '<div id="prev_sess_info">' >> web/index.html
+  while IFS='' read -r line || [[ -n "$line" ]]; do
+    echo "${line}<br />" >> web/index.html
+  done < $ARTIFACT_DIR/previous_sessions.html.txt 
+  echo '</div>' >> web/index.html
+fi
+
+if [ -f $ARTIFACT_DIR/errors.txt ]; then
+  echo '<div id="errors">' >> web/index.html
+  while IFS='' read -r line || [[ -n "$line" ]]; do
+    echo "${line}<br />" >> web/index.html
+  done < $ARTIFACT_DIR/errors.txt
+  echo '</div>' >> web/index.html
+fi
+
+cat >> web/index.html <<EOF
   <div id="build_info_html">${BUILD_INFO_HTML}</div>
-  <div id="extra_html">${EXTRA_HTML}</div>
+  <div id="previous_sessions_html">${EXTRA_HTML}</div>
   <div id="error_html">${ERROR_HTML}</div>
 </div>
 </body>
