@@ -18,7 +18,9 @@ else
   ARTIFACT_DIR=`mktemp -d -t canary-artifacts`
 fi
 mkdir -p $ARTIFACT_DIR
-export EXTRA_HTML=""
+BUILD_INFO_HTML=""
+ERROR_HTML=""
+PREVIOUS_SESSIONS_HTML=""
 EXIT_CODE=0
 TIMESTAMP=`date +%s` # Use a consistent value of time 
 
@@ -30,25 +32,17 @@ fi
 # Determine $REPO_ID, $REPO_NAME, $BRANCH_ID, and $BRANCH_NAME for current session using API
 # http://solano-api-docs.nfshost.com/
 if ! require_vars SOLANO_API_KEY; then
-  EXTRA_HTML="ERROR: The \$SOLANO_API_KEY environment variable must be set to retrieve current session info."
   EXIT_CODE=$((EXIT_CODE + 2))
 elif ! fetch_current_session_info; then
-  EXTRA_HTML="ERROR: Could not fetch current session info:<br />${ERROR_HTML}"
   EXIT_CODE=$((EXIT_CODE + 4))
-  unset ERROR_HTML
 else
-  EXTRA_HTML="Repo: ${REPO_NAME} (${REPO_ID})"
-  EXTRA_HTML="${EXTRA_HTML}<br />Branch: ${BRANCH_NAME} (${BRANCH_ID})"
+  BUILD_INFO_HTML="Repo: ${REPO_NAME} (${REPO_ID})<br />Branch: ${BRANCH_NAME} (${BRANCH_ID})"
 fi
 
 # Only searxh for previous results if we could lookup current session info above
 if [[ "$EXIT_CODE" == "0" ]]; then
-  if ! PREVIOUS_SESSION_HTML="$(fetch_previous_sessions_info)"; then
-    EXTRA_HTML="${EXTRA_HTML}<br />ERROR: Could not fetch previous session info:<br />${ERROR_HTML}"
+  if ! fetch_previous_sessions_info; then
     EXIT_CODE=$((EXIT_CODE + 8))
-    unset ERROR_HTML
-  else
-    EXTRA_HTML="${EXTRA_HTML}<br />Previous Sessions:<br />${PREVIOUS_SESSION_HTML}"
   fi
 fi
 

@@ -33,8 +33,12 @@ cat > web/index.html <<EOF
   <div id="time_div">${TIME}</div>
   <div id="seconds_div">${SECONDS}</div>
   <div id="divider" />
+  <div id="build_info_html">${BUILD_INFO_HTML}</div>
   <div id="extra_html">${EXTRA_HTML}</div>
+  <div id="error_html">${ERROR_HTML}</div>
 </div>
 </body>
 </html>
 EOF
+
+

@@ -41,7 +41,7 @@ function fetch_current_session_info {
     -o $CURRENT_SESSION_FILE \
     ${SOLANO_API_URL}/sessions/${TDDIUM_SESSION_ID} \
     2>${CURRENT_SESSION_FILE}-stderr.txt; then
-      ERROR_HTML="There was an error querying the API:<br />$(cat ${CURRENT_SESSION_FILE}-stderr.txt)"
+      ERROR_HTML="ERROR: Could not fetch current session info:<br />There was an error querying the API:<br />$(cat ${CURRENT_SESSION_FILE}-stderr.txt)"
       return 3
   fi
   # Extract info from json results
@@ -50,30 +50,30 @@ function fetch_current_session_info {
   REPO_ID=$(cat $CURRENT_SESSION_FILE | jq '.session.repo_id')
   REPO_NAME="$(cat $CURRENT_SESSION_FILE | jq -r '.session.repo_name')"
   if [[ -z "$BRANCH_ID" || "$BRANCH_ID" == "null" ]]; then
-    ERROR_HTML="Could not extract 'branch_id' for current session from API"
+    ERROR_HTML="ERROR: Could not fetch current session info:<br />TCould not extract 'branch_id' for current session from API"
     return 4
   fi
   if [[ -z "$BRANCH_NAME" || "$BRANCH_NAME" == "null" ]]; then
-    ERROR_HTML="Could not extract 'branch_name' for current session from API"
+    ERROR_HTML="ERROR: Could not fetch current session info:<br />TCould not extract 'branch_name' for current session from API"
     return 4
   fi
   if [[ -z "$REPO_ID" || "$REPO_ID" == "null" ]]; then
-    ERROR_HTML="Could not extract 'repo_id' for current session from API"
+    ERROR_HTML="ERROR: Could not fetch current session info:<br />TCould not extract 'repo_id' for current session from API"
     return 5
   fi
   if [[ -z "$REPO_NAME" || "$REPO_NAME" == "null" ]]; then
-    ERROR_HTML="Could not extract 'repo_id' for current session from API"
+    ERROR_HTML="ERROR: Could not fetch current session info:<br />TCould not extract 'repo_id' for current session from API"
     return 6
   fi
 }
 
 function fetch_previous_sessions_info {
   if ! require_vars BRANCH_ID; then
-    ERROR_HTML="The \$BRANCH_ID is required to query previous session status"
+    ERROR_HTML="ERROR: The \$BRANCH_ID is required to query previous session status"
     return 1
   fi
   if ! require_vars SOLANO_API_KEY HEADER_API_KEY_NAME HEADER_CLIENT_NAME HEADER_CLIENT_VALUE SOLANO_API_URL; then
-    ERROR_HTML="Not all required environment variables are set to query api"
+    ERROR_HTML="ERROR: Not all required environment variables are set to query api"
     return 2
   fi
   # Store previous session info for 'jq' parsing
@@ -83,16 +83,16 @@ function fetch_previous_sessions_info {
     -o $PREVIOUS_SESSIONS_FILE \
     ${SOLANO_API_URL}/sessions?suite_id={$BRANCH_ID}\&limit=5 \
     2>${PREVIOUS_SESSIONS_FILE}-stderr.txt; then
-      ERROR_HTML="There was an error querying the API:<br />$(cat ${PREVIOUS_SESSIONS_FILE}-stderr.txt)"
+      ERROR_HTML="ERROR: There was an error querying the API:<br />$(cat ${PREVIOUS_SESSIONS_FILE}-stderr.txt)"
       return 3
   fi
-  PREVIOUS_SESSION_HTML=""
   # For each session, add an html line
   cat $PREVIOUS_SESSIONS_FILE | jq -c '.sessions[]' | while read line; do
     ID=$(echo $line | jq '.id')
     URL=$(echo $line | jq -r '.report')
     STATUS=$(echo $line | jq -r '.status')
-    PREVIOUS_SESSION_HTML="${PREVIOUS_SESSION_HTML}<br /><a title='Session ${ID}' href='${URL}'>${ID} - ${STATUS}</a>"
+    PREVIOUS_SESSIONS_HTML="${PREVIOUS_SESSIONS_HTML}<br /><a title='Session ${ID}' href='${URL}'>${ID} - ${STATUS}</a>"
   done
-  echo $PREVIOUS_SESSION_HTML
+  # Write session history into separate file
+  echo "$PREVIOUS_SESSIONS_HTML" > ${ARTIFACT_DIR}/previous_sessions.html
 }
