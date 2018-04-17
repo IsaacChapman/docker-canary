@@ -92,6 +92,7 @@ function fetch_previous_sessions_info {
     ID=$(echo $line | jq '.id')
     URL=$(echo $line | jq -r '.report')
     STATUS=$(echo $line | jq -r '.status')
-    PREVIOUS_SESSION_HTML="${PREVIOUS_SESSION_HTML}<br /><a title=\"Session ${ID}\" href=\"${URL}\">${ID} - ${STATUS}</a>"
+    PREVIOUS_SESSION_HTML="${PREVIOUS_SESSION_HTML}<br /><a title='Session ${ID}' href='${URL}'>${ID} - ${STATUS}</a>"
   done
+  echo $PREVIOUS_SESSION_HTML
 }

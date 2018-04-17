@@ -43,12 +43,10 @@ fi
 
 # Only searxh for previous results if we could lookup current session info above
 if [[ "$EXIT_CODE" == "0" ]]; then
-  if ! fetch_previous_sessions_info; then
+  if ! PREVIOUS_SESSION_HTML="$(fetch_previous_sessions_info)"; then
     EXTRA_HTML="${EXTRA_HTML}<br />ERROR: Could not fetch previous session info:<br />${ERROR_HTML}"
     EXIT_CODE=$((EXIT_CODE + 8))
     unset ERROR_HTML
-  elif [[ "$PREVIOUS_SESSION_HTML" == "" ]]; then
-    EXTRA_HTML="${EXTRA_HTML}<br />No previous session info"
   else
     EXTRA_HTML="${EXTRA_HTML}<br />Previous Sessions:<br />${PREVIOUS_SESSION_HTML}"
   fi
